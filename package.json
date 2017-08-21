@@ -1,0 +1,19 @@
+{
+  "name": "fbot",
+  "version": "0.0.1",
+  "description": "Simple Facebook chatbot; unofficial api",
+  "author": "Hugo Fovargue",
+  "scripts": {
+    "eslint": "eslint **/*.js"
+  },
+  "dependencies": {
+    "facebook-chat-api": "^1.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.5.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.2.1"
+  }
+}
