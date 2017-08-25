@@ -1,9 +1,8 @@
-const data = require('../Resources/data.json');
+const data = require('../Resources/threadData.json');
 
 module.exports = {
   generate: (target, options) => {
     const targetObj = data[target];
-
     if (!targetObj) return 'err: target is null or undefined';
 
     switch (options) {

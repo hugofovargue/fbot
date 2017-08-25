@@ -1,4 +1,4 @@
-const data = require('../Resources/data.json');
+const data = require('../Resources/threadData.json');
 
 module.exports = {
 
