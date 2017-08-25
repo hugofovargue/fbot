@@ -105,7 +105,7 @@ function parseReactions(reactions, userIndex) {
   }
 }
 
-function ad ddReactionReceived(user, reaction) {
+function addReactionReceived(user, reaction) {
   data.userStats[user].reactionsReceived.total += 1;
   data.userStats[user].reactionsReceived[reaction] += 1;
 }
