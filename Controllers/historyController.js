@@ -4,28 +4,22 @@ let data = {};
 
 function loadThreadHistory(api, threadID, messageCount) {
   const messageStack = [];
-  const timestamp = (data.lastGetThreadHistory ? data.lastGetThreadHistory : undefined);
 
-  api.getThreadHistory(threadID, messageCount, timestamp, (err, history) => { //eslint-disable-line
+  api.getThreadHistory(threadID, messageCount, undefined, (err, history) => { //eslint-disable-line
     if (err) return console.error(err);
-    if (history === [] || undefined) return console.error('There are no new messages.');
 
     for (let index = history.length - 1; index >= 0; index -= 1) {
-      if (history[index].timestamp === data.lastGetThreadHistory) {
-        data.lastGetThreadHistory = history[index].timestamp;
-      } else {
-        messageStack.push(history[index]);
-      }
+      if (history[index].timestamp === data.lastGetThreadHistory) break;
+      messageStack.push(history[index]);
     }
-    parseThreadHistory(messageStack);
+
+    data.lastGetThreadHistory = history[history.length - 1].timestamp;
+    if (messageStack.length > 0) parseThreadHistory(messageStack);
   });
 }
 
 // This func parses the history array then updates the data.json
 function parseThreadHistory(messageStack) {
-  console.log('stack: ' + messageStack.length);
-  data.lastGetThreadHistory = messageStack[messageStack.length - 1].timestamp;
-
   messageStack.forEach((msg) => {
     for (let index = 0; index < data.userStats.length; index += 1) {
       if (msg.senderName === data.userStats[index].name) {
@@ -41,16 +35,12 @@ function parseThreadHistory(messageStack) {
 }
 
 function parseReactions(reactions, userIndex) {
-  console.log('parseReactions reached: ');
-  console.log(reactions);
   for (let i = 0; i < data.userStats.length; i += 1) {
     const senderIndex = i;
     const senderID = data.userStats[i].userID;
 
-    console.log('this is senderID' + senderID);
     for (let j = 0; j < Object.keys(reactions).length; j += 1) {
-      console.log('checking sender ' + reactions[senderID]);
-      switch (reactions[senderID]) { //eslint-disable-line
+      switch (reactions[senderID]) {
         case ':thumbsup:':
         case ':like:':
         case '\uD83D\uDC4D':
@@ -100,6 +90,7 @@ function parseReactions(reactions, userIndex) {
           addReactionReceived(userIndex, 'love');
           addReactionSent(senderIndex, 'love');
           break;
+        // no default
       }
     }
   }

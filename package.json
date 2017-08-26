@@ -4,7 +4,8 @@
   "description": "Simple Facebook chatbot; unofficial api",
   "author": "Hugo Fovargue",
   "scripts": {
-    "eslint": "eslint **/*.js"
+    "eslint": "eslint **/*.js",
+    "reset": "./reset.js"
   },
   "dependencies": {
     "facebook-chat-api": "^1.4.0"
