@@ -13,6 +13,7 @@ login({ appState: JSON.parse(fs.readFileSync('appstate.json', 'utf8')) }, (err, 
 
   api.listen((err, event) => {
     if (err) return console.error(err);
+
     switch (event.type) {
       case 'message':
         if (event.body.startsWith('$')) {
@@ -20,7 +21,7 @@ login({ appState: JSON.parse(fs.readFileSync('appstate.json', 'utf8')) }, (err, 
             if (err) console.log(err);
           });
           api.sendMessage(
-            responses.parseRequest(event.body),
+            responses.validateRequest(event.body),
             event.threadID
           );
         }

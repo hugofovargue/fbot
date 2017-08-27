@@ -17,7 +17,7 @@ module.exports = {
   }
   /* TODO
   fsAppend: () => {
-    
+
   }
   */
 };

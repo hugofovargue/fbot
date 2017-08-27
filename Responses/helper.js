@@ -6,9 +6,9 @@ module.exports = {
 
   getall: () => {
     let targets = '';
-    for (let i = 0; i < data.length; i += 1) {
-      targets += data[i].name;
-      if (i !== (data.length - 1)) targets += ', ';
+    for (let i = 0; i < data.userstats.length; i += 1) {
+      targets += data.userstats[i].shortname;
+      if (i !== (data.userstats.length - 1)) targets += ', ';
     }
     return `*Valid Targets:* all, me, ${targets}`;
   } // eslint-disable-line

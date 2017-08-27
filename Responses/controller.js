@@ -1,48 +1,58 @@
-const data = require('../Resources/threadData.json');
+const utils = require('../utils.js');
 const helper = require('./helper.js');
 const stats = require('./stats.js');
 
-const validateTarget = (target) => {
+let data = [];
+
+function parseRequest(req) {
+  const segments = req.match(/\w+/gi);
+
+  // Assign Command, then validate command.
+  const command = segments[0];
+  if (!command) return 'command null or undefined';
+
+  // Validate following target and options, then assign them.
+  const target = validateTarget(segments[1]);
+  const options = validateOptions(segments[2]);
+
+  // Invoke the appropriate functions based on command, and pass target and options args.
+  switch (command) {
+    case '':
+    case 'help':
+      return helper.help();
+    case 'getall':
+      return helper.getall();
+    case 'stats':
+      return stats.generate(target, options, data);
+    default:
+      return 'err: command did not match';
+  }
+}
+
+function validateTarget(target) {
   if (!target) return null;
   for (let i = 0; i < data.length; i += 1) {
-    if (data[i].name === target) {
+    if (data[i].shortname === target) {
       return i;
     }
   }
   return null;
-};
+}
 
-const validateOptions = (options) => {
+function validateOptions(options) {
   if (options) return options;
   return null;
-};
+}
 
 
 module.exports = {
-  parseRequest: (request) => {
-    // Validate request. Then store request keywords into segments.
-    if (request === '$') return 'err: command not complete';
-    const segments = request.match(/\w+/gi);
+  validateRequest: (req) => {
+    if (req === '$') return 'err: command not complete';
 
-    // Assign Command, then validate command.
-    const command = segments[0];
-    if (!command) return 'command null or undefined';
+    utils.fsRead('../fbot/Resources/threadData.json', (obj) => {
+      data = obj.userStats;
+    });
 
-    // Validate following target and options, then assign them.
-    const target = validateTarget(segments[1]);
-    const options = validateOptions(segments[2]);
-
-    // Invoke the appropriate functions based on command, and pass target and options args.
-    switch (command) {
-      case '':
-      case 'help':
-        return helper.help();
-      case 'getall':
-        return helper.getall();
-      case 'stats':
-        return stats.generate(target, options);
-      default:
-        return 'err: command did not match';
-    }
+    return parseRequest(req);
   } // eslint-disable-line
 };
